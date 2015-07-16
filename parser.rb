@@ -6,11 +6,11 @@ class Parser
     def splitwise(body, user_id)
       @splitwise_user_id = user_id
       expenses = JSON.parse(body)['expenses']
-      expenses.map! {|e| clean_splitwise_expense(e)}
-      summarize expenses.reject {|e| e==false}
+      summarize expenses.map! {|e| clean_splitwise_expense(e)}
     end
 
     def summarize(expenses)
+      expenses.reject! {|e| e==false}
       res = {}
       expenses.each do |expense|
         #pp expense
@@ -28,8 +28,8 @@ class Parser
       if data.is_a? Hash and data.has_key? 'orders'
         data = data.orders
       end
+      summarize data.map! {|e| clean_paytm_expense(e)}
     end
-
 
     def clean_paytm_expense(expense)
       # We do not count wallet or failed expenses

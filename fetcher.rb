@@ -20,16 +20,20 @@ class Fetcher
           body = response.body
         end
         expenses = Parser.new.splitwise(body, config['credentials']['user_id'])
-
-        expenses.each do |month, e|
-          content = e.to_yaml
-          File.write("reports/splitwise/#{month}.yml", content)
-        end
+        write('splitwise', expenses)
     end
 
     def paytm(config)
       # For now, we just parse the json file
       body = File.read('raw_data/paytm.json')
-      data = Parser.new.paytm(body)
+      orders = Parser.new.paytm(body)
+      write('paytm', orders)
+    end
+
+    def write(method, data)
+      data.each do |month, e|
+        content = e.to_yaml
+        File.write("reports/#{method}/#{month}.yml", content)
+      end
     end
 end
