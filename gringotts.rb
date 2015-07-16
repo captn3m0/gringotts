@@ -10,7 +10,11 @@ fetcher = Fetcher.new
 unless ARGV.empty?
   method = ARGV[0].to_s
   config = config[method]
-  fetcher.send(method, config)
+  if ARGV[1] === 'mock'
+    fetcher.send(method, config, true)
+  else
+    fetcher.send(method, config)
+  end
 else
   puts "No module specified"
 end
