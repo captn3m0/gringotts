@@ -1,6 +1,6 @@
 # gringotts
 
-![gringotts-bank](http://www.hinance.org/)
+![gringotts-bank](gringotts.jpg)
 
 Personal finance manager application that gets your spending information
 from various ecommerce applications (such as Amazon etc).
