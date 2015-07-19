@@ -49,11 +49,14 @@ class Parser
       amount = 0
       users.each do |user|
         if user['user_id'] === @splitwise_user_id
-          return false if user['owed_share'].to_f.floor.zero?
+          return false if user['net_balance'].to_f.floor.zero?
           return {
             "id"             => expense['id'],
             "description"    => expense['description'],
-            "amount"         => user['owed_share'].to_f,
+            # net_balance is -ve if you owe it
+            # or +ve if you paid
+            # Since we are tracking expenses, we use the reverse
+            "amount"         => -user['net_balance'].to_f,
             "time"           => DateTime.iso8601(expense['date']).to_time.to_datetime.to_time,
             "category"       => expense['category']['name']
           }
