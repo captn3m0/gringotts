@@ -23,6 +23,7 @@ class Fetcher
         write('splitwise', expenses)
     end
 
+    # You put the output of https://paytm.com/shop/orderhistory?pagesize=300 in the json file
     def paytm(config)
       # For now, we just parse the json file
       body = File.read('raw_data/paytm.json')
@@ -30,6 +31,7 @@ class Fetcher
       write('paytm', orders)
     end
 
+    # Put the output of https://paytm.com/shop/wallet/txnhistory?page_size=199&page_number=0 in the json file
     def uber(config)
       # Now we parse the transactions
       body = File.read('raw_data/paytm_txn.json')

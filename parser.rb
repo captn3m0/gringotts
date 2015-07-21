@@ -23,7 +23,6 @@ class Parser
     end
 
     def paytm(body)
-      # You put the output of https://paytm.com/shop/orderhistory?pagesize=300 in the json file
       data = JSON.parse(body)
       if data.is_a? Hash and data.has_key? 'orders'
         data = data.orders
