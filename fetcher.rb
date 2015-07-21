@@ -30,6 +30,13 @@ class Fetcher
       write('paytm', orders)
     end
 
+    def uber(config)
+      # Now we parse the transactions
+      body = File.read('raw_data/paytm_txn.json')
+      rides = Parser.new.uber(body)
+      write('uber', rides)
+    end
+
     def write(method, data)
       data.each do |month, e|
         content = e.to_yaml

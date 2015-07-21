@@ -31,6 +31,23 @@ class Parser
       summarize data.map! {|e| clean_paytm_expense(e)}
     end
 
+    def uber(body)
+      # We only return the uber orders for this now
+      data = JSON.parse(body)['response'].select {|order| order['txnTo'] == 'UBER'}
+      summarize data.map! {|e| clean_uber_expense(e)}
+    end
+
+    def clean_uber_expense(order)
+      return {
+        'id'                => order['txnDescription1'],
+        'description'       => order['txnDesc1'],
+        'amount'            => order['txnamount'].to_f,
+        'time'              => DateTime.parse(order['txndate']).to_time,
+        # We keep the category to be the same as that used in Splitwise
+        'category'          => 'Taxi'
+      }
+    end
+
     def clean_paytm_expense(expense)
       # We do not count wallet or failed expenses
       return false if expense['status'].downcase === 'failed'
