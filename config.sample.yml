@@ -1,0 +1,16 @@
+splitwise:
+  credentials:
+    token:
+    secret:
+    user_id:
+  key:
+  secret:
+  base_url: "https://secure.splitwise.com"
+  authorize_path: "/authorize"
+  request_path: "/api/v3.0/get_request_token"
+  access_token_path: "/api/v3.0/get_access_token"
+paytm:
+  credentials:
+base_currency: INR
+exchange_rate:
+  USD: 64.11
