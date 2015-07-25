@@ -1,4 +1,5 @@
 require './parser'
+require 'csv'
 require 'patron'
 
 class Fetcher
@@ -13,6 +14,7 @@ class Fetcher
       @paytm_session.base_url = 'https://paytm.com'
       @paytm_session.enable_debug "/tmp/patron.debug"
       @config = config
+      @parser = Parser.new(config)
     end
     def splitwise(mock = false)
         config = @config['splitwise']
@@ -34,8 +36,14 @@ class Fetcher
           response = access_token.get('https://secure.splitwise.com/api/v3.0/get_expenses?limit=0')
           body = response.body
         end
-        expenses = Parser.new.splitwise(body, config['credentials']['user_id'])
+        expenses = @parser.splitwise(body)
         write('splitwise', expenses)
+    end
+
+    def amazon_com(mock = false)
+      csv = CSV.read('raw_data/amazon_com.csv', :headers=>true)
+      expenses = @parser.amazon_com(csv)
+      write('amazon_com', expenses)
     end
 
     def paytm(mock = false)
@@ -47,7 +55,7 @@ class Fetcher
         response = @paytm_session.get('/shop/orderhistory?pagesize=300')
         body = response.body
       end
-      orders = Parser.new.paytm(body)
+      orders = @parser.paytm(body)
       write('paytm', orders)
     end
 
@@ -61,7 +69,7 @@ class Fetcher
         body = response.body
       end
       # Now we parse the transactions
-      rides = Parser.new.uber(body)
+      rides = @parser.uber(body)
       write('uber', rides)
     end
 

@@ -22,10 +22,12 @@ from various ecommerce applications (such as Amazon etc).
 
 ## Modules
 
-Currently, there are two modules:
+Currently, there are four modules:
 
 - [splitwise](https://splitwise.com) - Expense tracker for friends, which I heavily use. Most of my shared expenses end up here
 - [paytm](https://paytm.com) - This is what I use for recharges, like most of India. They do have an ecommerce store, which is also tracked
+- [uber](https://uber.com) - Currently only handles uber payments made via paytm
+- [amazon.com](https://amazon.com) - Handled via [amazon csv export](https://www.amazon.com/gp/b2b/reports)
 
 ### splitwise
 
@@ -39,14 +41,19 @@ Currently, there are two modules:
   + recharges
   + purchases on paytm
 
-Does not track uber payments, because it doesn't provide enough information to be useful.
+The paytm credentials are re-used for tracking uber payments as well
+
+### amazon.com
+
+Tracks my international purchases. Amount is converted to INR using the exchange rate defined in config
 
 ### Planned Modules
 
+This is in priority order:
+
 - amazon.in
-- amazon.com
 - flipkart
-- uber
+- uber (Using uber API instead of paytm)
 
 ## Getting Started
 
