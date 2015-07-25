@@ -2,12 +2,14 @@ GEM
   remote: https://rubygems.org/
   specs:
     oauth (0.4.7)
+    patron (0.4.20)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   oauth
+  patron
 
 BUNDLED WITH
    1.10.5

@@ -25,7 +25,7 @@ class Parser
     def paytm(body)
       data = JSON.parse(body)
       if data.is_a? Hash and data.has_key? 'orders'
-        data = data.orders
+        data = data['orders']
       end
       summarize data.map! {|e| clean_paytm_expense(e)}
     end

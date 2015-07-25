@@ -1,6 +1,21 @@
 require './parser'
+require 'patron'
+
 class Fetcher
-    def splitwise(config, mock = false)
+    def initialize(config)
+      cookie = config['paytm']['credentials']
+
+      @paytm_session = Patron::Session.new
+      @paytm_session.headers = {
+        #'User-Agent' => 'Gringotts (https://github.com/captn3m0/gringotts)',
+        'Cookie'     => "connect.sid=#{cookie};"
+      }
+      @paytm_session.base_url = 'https://paytm.com'
+      @paytm_session.enable_debug "/tmp/patron.debug"
+      @config = config
+    end
+    def splitwise(mock = false)
+        config = @config['splitwise']
         body = ""
         if mock
           body = File.read('raw_data/splitwise.json')
@@ -23,18 +38,29 @@ class Fetcher
         write('splitwise', expenses)
     end
 
-    # You put the output of https://paytm.com/shop/orderhistory?pagesize=300 in the json file
-    def paytm(config)
-      # For now, we just parse the json file
-      body = File.read('raw_data/paytm.json')
+    def paytm(mock = false)
+      body = ''
+      if mock
+        # For now, we just parse the json file
+        body = File.read('raw_data/paytm.json')
+      else
+        response = @paytm_session.get('/shop/orderhistory?pagesize=300')
+        body = response.body
+      end
       orders = Parser.new.paytm(body)
       write('paytm', orders)
     end
 
-    # Put the output of https://paytm.com/shop/wallet/txnhistory?page_size=199&page_number=0 in the json file
-    def uber(config)
+    def uber(mock = false)
+      body = ''
+      if mock
+        # For now, we just parse the json file
+        body = File.read('raw_data/paytm_txn.json')
+      else
+        response = @paytm_session.get('/shop/wallet/txnhistory?page_size=199&page_number=0')
+        body = response.body
+      end
       # Now we parse the transactions
-      body = File.read('raw_data/paytm_txn.json')
       rides = Parser.new.uber(body)
       write('uber', rides)
     end
